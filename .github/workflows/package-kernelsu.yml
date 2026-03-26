@@ -1,0 +1,29 @@
+name: Package for KernelSU
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Package KernelSU Module
+      uses: thedoctor0/zip-release@master
+      with:
+        type: 'zip'
+        filename: 'kernelsu-module-hyperos-cn2global.zip'
+        exclusions: '*.git* /*node_modules/* .editorconfig'
+    - name: Package KernelSU Module without languages
+      uses: thedoctor0/zip-release@master
+      with:
+        type: 'zip'
+        filename: 'kernelsu-module-hyperos-cn2global-no-languages.zip'
+        exclusions: '*.git* /*node_modules/* .editorconfig treble-overlay-*.apk'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "kernelsu-module-hyperos-cn2global.zip,kernelsu-module-hyperos-cn2global-no-languages.zip"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        allowUpdates: true
